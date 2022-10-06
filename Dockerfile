@@ -46,6 +46,7 @@ RUN sudo ansible-galaxy collection install azure.azcollection && \
     sudo /etc/init.d/ssh start &
 
 COPY start.sh /home/ansible/start.sh
+COPY basic.yaml /home/ansible/basic.yaml
 COPY inventory.ini /home/ansible/sampleInventory.ini
 
 ENTRYPOINT ["zsh", "/home/ansible/start.sh"]
