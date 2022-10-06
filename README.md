@@ -13,7 +13,7 @@ docker build -t ansible .
 Podman:
 
 ```bash
-podman build -t ansible .
+podman build -t ansible . --format docker
 ```
 
 ## Push
@@ -37,7 +37,7 @@ Docker:
 ```bash
 docker network create -d bridge common
 docker run -p 22 --rm -i -d --name c0 --network common --env INVENTORY=asdfasdfasdf ansible:latest zsh
-docker run -p 22 --rm -i -d --name c1 --network common --env INVENTORY=afasdfasgwee ansible:latest zsh
+docker run -p 22 --rm -i -d --name c1 --network common --env INVENTORY=afasdfasgwee --env PASSWORD=ans ansible:latest zsh
 ```
 
 Podman:
@@ -45,7 +45,7 @@ Podman:
 ```bash
 podman network create -d bridge common
 podman run -p 22 --rm -i -d --name c0 --network common --env INVENTORY=asdfasdfasdf ansible:latest zsh
-podman run -p 22 --rm -i -d --name c1 --network common --env INVENTORY=afasdfasgwee ansible:latest zsh
+podman run -p 22 --rm -i -d --name c1 --network common --env INVENTORY=afasdfasgwee --env PASSWORD=ans ansible:latest zsh
 ```
 
 ## Test Connection
@@ -61,5 +61,5 @@ ssh ansible@c1
 From c0:
 
 ```bash
-ansible-playbook -i sampleInventory.ini basic.yml
+ansible-playbook -i sampleInventory.ini basic.yaml
 ```

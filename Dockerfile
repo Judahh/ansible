@@ -31,6 +31,8 @@ USER root
 
 RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.3/zsh-in-docker.sh)"
 
+SHELL ["/bin/zsh", "-c"]
+
 # Config ssh
 RUN mkdir /var/run/sshd && \
     apt install openssh-client openssh-server nano -y && \
@@ -41,16 +43,18 @@ RUN mkdir /var/run/sshd && \
 
 USER ansible
 
-# Install Ansible Galaxy roles
-RUN sudo ansible-galaxy collection install azure.azcollection && \
-    sudo python -m pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt && \
-    sudo /etc/init.d/ssh start &
+SHELL ["/bin/zsh", "-c"]
 
-COPY start.sh /home/ansible/start.sh
+# Install Ansible Galaxy roles
+# RUN sudo ansible-galaxy collection install azure.azcollection && \
+#     sudo python -m pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt && \
+#     sudo /etc/init.d/ssh start &
+
 COPY basic.yaml /home/ansible/basic.yaml
 COPY inventory.ini /home/ansible/sampleInventory.ini
 COPY ansible.cfg /etc/ansible/ansible.cfg
+COPY start.sh /home/ansible/start.sh
 
-ENTRYPOINT ["zsh", "/home/ansible/start.sh"]
+ENTRYPOINT ["/bin/zsh", "/home/ansible/start.sh"]
 
 EXPOSE 22
