@@ -21,6 +21,7 @@ WORKDIR /home/ansible
 
 # Add keys and Install Ansible
 RUN mkdir -p /home/ansible/.ssh && \
+    sudo mkdir -p /etc/ansible && \
     sudo ssh-keygen -A && \
     sudo ssh-keygen -t rsa -f .ssh/id_rsa -q -N "" && \
     cp .ssh/id_rsa.pub .ssh/authorized_keys && \
@@ -48,6 +49,7 @@ RUN sudo ansible-galaxy collection install azure.azcollection && \
 COPY start.sh /home/ansible/start.sh
 COPY basic.yaml /home/ansible/basic.yaml
 COPY inventory.ini /home/ansible/sampleInventory.ini
+COPY ansible.cfg /etc/ansible/ansible.cfg
 
 ENTRYPOINT ["zsh", "/home/ansible/start.sh"]
 
