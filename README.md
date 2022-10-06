@@ -1,7 +1,9 @@
-# ansible
+# Ansible
+
 Ansible container
 
 ## Build
+
 Docker:
 
 ```bash
@@ -12,6 +14,20 @@ Podman:
 
 ```bash
 podman build -t ansible .
+```
+
+## Push
+
+Docker:
+
+```bash
+docker push judahh/ansible:latest
+```
+
+Podman:
+
+```bash
+podman push docker.io/judahh/ansible:latest
 ```
 
 ## Run
@@ -32,7 +48,7 @@ podman run -p 22 --rm -i -d --name c0 --network common --env INVENTORY=asdfasdfa
 podman run -p 22 --rm -i -d --name c1 --network common --env INVENTORY=afasdfasgwee ansible:latest zsh
 ```
 
-## Test
+## Test Connection
 
 From c0:
 
@@ -40,8 +56,10 @@ From c0:
 ssh ansible@c1
 ```
 
-## Add Password
+## Test Ansible
+
+From c0:
 
 ```bash
-echo -n 'ansible:ansible' | sudo chpasswd
+ansible-playbook -i sampleInventory.ini basic.yml
 ```
