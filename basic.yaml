@@ -1,0 +1,7 @@
+- hosts: all
+  become: yes
+  tasks:
+  - name: Add key to authorized keys
+    copy:
+      src: .ssh/id_rsa.pub
+      dest: .ssh/authorized_keys
