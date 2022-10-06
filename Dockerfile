@@ -9,7 +9,7 @@ USER root
 # Update and install base packages
 RUN apt update && \
     apt upgrade -y && \
-    apt install locales locales-all sudo -y
+    apt install locales locales-all sudo sshpass -y
 
 # Add ansible user
 RUN useradd -rm -d /home/ansible -s /bin/bash -g root -G sudo -u 1001 ansible && \
