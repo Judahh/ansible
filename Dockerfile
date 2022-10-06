@@ -19,8 +19,6 @@ RUN useradd -rm -d /home/ansible -s /bin/bash -g root -G sudo -u 1001 ansible &&
 USER ansible
 WORKDIR /home/ansible
 
-RUN echo $HOME
-
 # Add keys and Install Ansible
 RUN mkdir -p /home/ansible/.ssh && \
     sudo ssh-keygen -A && \
@@ -30,8 +28,7 @@ RUN mkdir -p /home/ansible/.ssh && \
 
 USER root
 
-# Add password to user ansible
-RUN echo -n 'ansible:ansible' | sudo chpasswd
+RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.3/zsh-in-docker.sh)"
 
 # Config ssh
 RUN mkdir /var/run/sshd && \
@@ -44,12 +41,12 @@ RUN mkdir /var/run/sshd && \
 USER ansible
 
 # Install Ansible Galaxy roles
-RUN ansible-galaxy collection install azure.azcollection && \
-    pip3 install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt
+RUN sudo ansible-galaxy collection install azure.azcollection && \
+    sudo python -m pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt && \
+    sudo /etc/init.d/ssh start &
 
-RUN sudo /etc/init.d/ssh start
+COPY start.sh /home/ansible/start.sh
 
-# Import Inventory
-CMD echo ${INVENTORY} > /home/ansible/inventory.ini && tail -f /dev/null
+ENTRYPOINT ["zsh", "/home/ansible/start.sh"]
 
 EXPOSE 22
